@@ -1,16 +1,33 @@
 // load .env data into process.env
 require('dotenv').config();
 
+// import query functions
+const user_queries = require('./db/queries/user_queries');
+// {getUserInfoWithEmail, getUserInfoWithUserID} = require('./db/queries/user_queries');
+const {getAllWidgets, createWidget, getWidgetWithWidgetID} = require('./db/queries/widget_queries');
+const {getListsWithUserID, getListContentWithListID, createList, updateListWithListID, deleteListWithListID} = require('./db/queries/list_queries');
+const {updateWidgetOwner} = require('./db/queries/widget_owner_queries');
+const {addMultipleWidgetsToList} = require('./db/queries/list_content_queries');
+
 const express = require("express");
 const path = require('path');
 const morgan = require('morgan');
 const cors = require('cors')
 const cookieSession = require('cookie-session');
-const port = 3006;
+const port = 3000;
 
 
 const app = express();
 app.use(morgan('dev'));
+
+// Use node to connect to psql db
+const { Pool } = require('pg');
+const dbParams = require('./lib/db.js');
+const db = new Pool(dbParams);
+db.connect();
+module.exports = db;
+const {getUserInfoWithEmail, getUserInfoWithUserID} = user_queries(db)
+
 app.post("/login", (req, res) => {
     res.send('POSTING to login');
 }) // express
@@ -18,8 +35,14 @@ app.get("/", (req, res) => {
     res.send('Hello there');
 }) //we can say homepage, serve the index.js and the bundle (index)
 app.get("/user/:id", (req, res) => {
-    res.send('load a users profile')
-}); //load a users profile 
+    const userID = req.params.id;
+    getUserInfoWithUserID(userID)
+    .then(response => {
+        res.send(response)
+    })
+    
+
+});
 
 
 //User/:id/collections
@@ -65,15 +88,3 @@ app.listen(port, () => {
 })
 app.get("/login")
 
-// Use node to connect to psql db
-const { Pool } = require('pg');
-const dbParams = require('./lib/db.js');
-const db = new Pool(dbParams);
-// const db = new Pool({
-//   user: 'vagrant',
-//   password: '123',
-//   host: 'localhost',
-//   database: 'final_project'
-// });
-db.connect();
-module.exports = db;
