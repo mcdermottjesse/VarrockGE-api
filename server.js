@@ -14,7 +14,12 @@ const morgan = require("morgan");
 const cors = require("cors");
 const port = 3000;
 
+
+
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 app.use(morgan("dev"));
 
 // Cookies
@@ -52,13 +57,12 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  // const { email, password } = req.body; // Use this when a form is set up
-  const email = "ray@ray.com";
-  const password = "ray";
+  console.log(req.body)
+  const { email, password } = req.body;
   getUserInfoWithEmail(email).then((response) => {
     if (password === response.password) {
       req.session.user_id = response.id;
-      res.send("Successfully logged in!"); // Or redirect
+      res.send('OK'); // Or redirect
     }
   });
 });
