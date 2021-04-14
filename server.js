@@ -14,8 +14,6 @@ const morgan = require("morgan");
 const cors = require("cors");
 const port = 3000;
 
-
-
 const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -62,7 +60,7 @@ app.post("/login", (req, res) => {
   getUserInfoWithEmail(email).then((response) => {
     if (password === response.password) {
       req.session.user_id = response.id;
-      res.send('Successfully logged in!');
+      res.send(response);
     }
   });
 });
