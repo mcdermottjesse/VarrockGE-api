@@ -62,14 +62,14 @@ app.post("/login", (req, res) => {
   getUserInfoWithEmail(email).then((response) => {
     if (password === response.password) {
       req.session.user_id = response.id;
-      res.send('OK'); // Or redirect
+      res.send('Successfully logged in!');
     }
   });
 });
 
 app.post("/logout", (req, res) => {
   req.session = null;
-  res.send("Successfully logged out!"); // Or redirect
+  res.send("Successfully logged out!");
 });
 
 app.get("/", (req, res) => {
@@ -125,16 +125,16 @@ app.post("/user/:id/collections/:listid/delete", (req, res) => {
 
 //WIDGETS
 
-app.get("/widget", (req, res) => {
+app.get("/widgets", (req, res) => {
   getAllWidgets().then((response) => res.send(response));
 });
 
-app.get("/widget/:id", (req, res) => {
+app.get("/widgets/:id", (req, res) => {
   const widgetID = req.params.id;
   getWidgetWithWidgetID(widgetID).then((response) => res.send(response));
 });
 
-app.post("/widget/:id", (req, res) => {
+app.post("/widgets/:id", (req, res) => {
   const userID = 3; // Use cookies to get UserID. Hardcoded for now
   const widgetID = req.params.id;
   const boughtForPriceCents = 7000; // Use forms to get this value. Hardcoded for now
@@ -143,7 +143,7 @@ app.post("/widget/:id", (req, res) => {
   );
 });
 
-app.post("/widget", (req, res) => {
+app.post("/widgets", (req, res) => {
   // Protect this route so only admins may access
   // The widget must have the following object structure:
   // The below values are hardcoded for now. Real values will come from a form
