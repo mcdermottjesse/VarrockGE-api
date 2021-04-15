@@ -17,7 +17,8 @@ module.exports = (db) => {
     FROM list_contents
     JOIN lists ON lists.id = list_contents.list_id
     JOIN widgets ON list_contents.widget_id = widgets.id
-    `, [])
+    WHERE list_contents.list_id = $1
+    `, [listID])
     .then(response => response.rows)
     .catch(err => err);
   };

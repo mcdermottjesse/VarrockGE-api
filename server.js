@@ -84,8 +84,13 @@ app.get("/user/:id", (req, res) => {
 app.get("/user/:id/collections/:listid", (req, res) => {
   // Displays all cards in a certain list
   // const userID = req.params.id; // I don't think this parameter is required. Maybe delete this line later
+  console.log(req.params)
   const listID = req.params.listid;
-  getListContentWithListID(listID).then((response) => res.send(response));
+  console.log(listID)
+  getListContentWithListID(listID).then((response) => {
+    console.log(response)
+    res.send(response);
+  });
 });
 
 app.get("/user/:id/collections", (req, res) => {
