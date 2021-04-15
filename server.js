@@ -142,22 +142,21 @@ app.post("/widgets/:id", (req, res) => {
 });
 
 app.post("/widgets", (req, res) => {
-  // Protect this route so only admins may access
-  // The widget must have the following object structure:
-  // The below values are hardcoded for now. Real values will come from a form
+ // widgetParams allows admin form to create a custom nft(no image yet)
   const widgetParams = {
-    rarity_id: 4,
-    subcategory_id: 1,
-    name: "Dragonite",
-    MSRP_cents: 3500,
-    for_sale_by_owner: true,
-    current_sell_price_cents: 4500,
-    hash: "hashno13",
-    description: "Everyones favorite first gen dragon",
-  };
+    rarity_id: req.body.rarityID,
+    subcategory_id: req.body.categoryID,
+    name: req.body.name, 
+    MSRP_cents: req.body.cost,
+    for_sale_by_owner: true, 
+    current_sell_price_cents: 1000, 
+    hash: "dummyTHIChash1",
+    description: req.body.description
+  }
   createWidget(widgetParams).then((response) => res.send(response));
 });
 
 app.listen(port, () => {
   console.log(`Express server listening on http://localhost:${port}`);
 });
+
