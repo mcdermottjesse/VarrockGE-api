@@ -82,7 +82,7 @@ app.get("/user/:id", (req, res) => {
 
 //User/:id/collections
 
-app.get("/user/:id/collections/:listid", (req, res) => {
+app.get("/user/:id/collections/:id", (req, res) => {
   // Displays all cards in a certain list
   // const userID = req.params.id; // I don't think this parameter is required. Maybe delete this line later
   console.log(req.params)
@@ -100,7 +100,7 @@ app.get("/user/:id/collections", (req, res) => {
   getListsWithUserID(userID).then((response) => res.send(response));
 });
 
-app.post("/user/:id/collections/:listid", (req, res) => {
+app.post("/user/:id/collections/:id", (req, res) => {
   // Edits a users list (list name and description only)
   // const userID = req.params.id; // I don't think this parameter is required. Maybe delete this line later
   const listID = req.params.listid;
@@ -119,7 +119,7 @@ app.post("/user/:id/collections", (req, res) => {
   createList(userID, listName, listDesc).then((response) => res.send(response));
 });
 
-app.post("/user/:id/collections/:listid/delete", (req, res) => {
+app.post("/user/:id/collections/:id/delete", (req, res) => {
   // Delete a list for a certain user
   const userID = req.params.id; // Use to check if user is the author of the list
   // Function to check if user is author
