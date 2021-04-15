@@ -31,6 +31,7 @@ app.use(cookieSession(sessionConfig));
 // Use node to connect to psql db
 const { Pool } = require("pg");
 const dbParams = require("./lib/db.js");
+const { promises } = require("fs");
 const db = new Pool(dbParams);
 db.connect();
 module.exports = db;
@@ -137,14 +138,16 @@ app.get("/widgets/:id", (req, res) => {
   getWidgetWithWidgetID(widgetID).then((response) => res.send(response));
 });
 
-app.post("/widgets/:id", (req, res) => {
-  const userID = 3; // Use cookies to get UserID. Hardcoded for now
-  const widgetID = req.params.id;
-  const boughtForPriceCents = 7000; // Use forms to get this value. Hardcoded for now
-  updateWidgetOwner(userID, widgetID, boughtForPriceCents).then((response) =>
-    res.send(response)
-  );
-});
+app.post("/widgets/checkout", (req, res) => {
+  // req.body consists of an array of items to be checked out
+  // Create an array of promises to be fed into Promise.all
+  const postRequestArray = [];
+  for (const postRequest of req.body) {
+    postRequestArray.push(updateWidgetOwner(postRequest.userID, postRequest.widgetID, postRequest.boughtForPriceCents))
+  }
+
+  Promise.all(postRequestArray).then(response => res.send(response));
+})
 
 app.post("/widgets", (req, res) => {
  // widgetParams allows admin form to create a custom nft(no image yet)
