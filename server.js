@@ -48,7 +48,7 @@ const {
   updateListWithListID,
   deleteListWithListID,
 } = list_queries(db);
-const { updateWidgetOwner } = widget_owner_queries(db);
+const { updateWidgetOwner, getAllWidgetOwners } = widget_owner_queries(db);
 const { addMultipleWidgetsToList } = list_content_queries(db);
 
 app.get("/login", (req, res) => {
@@ -85,11 +85,8 @@ app.get("/user/:id", (req, res) => {
 app.get("/user/:id/collections/:id", (req, res) => {
   // Displays all cards in a certain list
   // const userID = req.params.id; // I don't think this parameter is required. Maybe delete this line later
-  console.log(req.params)
   const listID = req.params.listid;
-  console.log(listID)
   getListContentWithListID(listID).then((response) => {
-    console.log(response)
     res.send(response);
   });
 });
@@ -112,11 +109,14 @@ app.post("/user/:id/collections/:id", (req, res) => {
 });
 
 app.post("/user/:id/collections", (req, res) => {
-  // Create a new list for a user
+  // Create a new list for a user and add widgets to it
   const userID = req.params.id;
-  const listName = "Example List Name"; // Hardcoded. Will come from forms
-  const listDesc = "Example List Description"; //Hardcoded. Will come from forms
-  createList(userID, listName, listDesc).then((response) => res.send(response));
+  const {listName, listDesc, listItems} = req.body;
+  createList(userID, listName, listDesc).then((response) => {
+    const listID = response.id;
+    addMultipleWidgetsToList(listID, listItems)
+    res.send(`Collection ID ${listID} "${listName}" created. Widgets ${listItems} added to it.`);
+  });
 });
 
 app.post("/user/:id/collections/:id/delete", (req, res) => {
@@ -133,10 +133,18 @@ app.get("/widgets", (req, res) => {
   getAllWidgets().then((response) => res.send(response));
 });
 
+app.get("/widgets/owners", (req, res) => {
+  getAllWidgetOwners()
+  .then(response => {
+    res.send(response);
+  })
+})
+
 app.get("/widgets/:id", (req, res) => {
   const widgetID = req.params.id;
   getWidgetWithWidgetID(widgetID).then((response) => res.send(response));
 });
+
 
 app.post("/widgets/checkout", (req, res) => {
   // req.body consists of an array of items to be checked out
