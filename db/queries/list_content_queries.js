@@ -15,5 +15,15 @@ module.exports = (db) => {
     }
   };
 
-  return { addMultipleWidgetsToList };
+  const deleteAllWidgetsFromListID = (listID) => {
+    return db.query(`
+    DELETE FROM list_contents
+    WHERE list_id = $1
+    RETURNING *
+    `, [listID])
+    .then(response => response.rows)
+    .catch(err => err);
+  }
+
+  return { addMultipleWidgetsToList, deleteAllWidgetsFromListID };
 };
