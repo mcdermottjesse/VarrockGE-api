@@ -49,7 +49,7 @@ const {
   deleteListWithListID,
 } = list_queries(db);
 const { updateWidgetOwner, getAllWidgetOwners } = widget_owner_queries(db);
-const { addMultipleWidgetsToList } = list_content_queries(db);
+const { addMultipleWidgetsToList, deleteAllWidgetsFromListID } = list_content_queries(db);
 
 app.get("/login", (req, res) => {
   res.send("This is the login page");
@@ -82,7 +82,7 @@ app.get("/user/:id", (req, res) => {
 
 //User/:id/collections
 
-app.get("/user/:id/collections/:id", (req, res) => {
+app.get("/user/:id/collections/:listid", (req, res) => {
   // Displays all cards in a certain list
   // const userID = req.params.id; // I don't think this parameter is required. Maybe delete this line later
   const listID = req.params.listid;
@@ -97,15 +97,25 @@ app.get("/user/:id/collections", (req, res) => {
   getListsWithUserID(userID).then((response) => res.send(response));
 });
 
-app.post("/user/:id/collections/:id", (req, res) => {
+app.post("/user/:id/collections/:listid", (req, res) => {
   // Edits a users list (list name and description only)
   // const userID = req.params.id; // I don't think this parameter is required. Maybe delete this line later
   const listID = req.params.listid;
-  const listName = "Changed List Name"; // Hardcoded. Will come from forms
-  const listDesc = "Changed List Description"; //Hardcoded. Will come from forms
-  updateListWithListID(listID, listName, listDesc).then((response) =>
+  console.log('req.body', req.body);
+  // const listName = "Changed List Name"; // Hardcoded. Will come from forms
+  // const listDesc = "Changed List Description"; //Hardcoded. Will come from forms
+  const {listName, listDesc, listItems} = req.body;
+  updateListWithListID(listID, listName, listDesc)
+  .then((response) =>{
+    deleteAllWidgetsFromListID(listID)
+  })
+  .then((response) => {
     res.send(response)
-  );
+    addMultipleWidgetsToList(listID, listItems)
+  })
+  .then(response => {
+    res.send(`Collection ID ${listID} "${listName}" updated. It contains the following widgetes: ${listItems}`);
+  })
 });
 
 app.post("/user/:id/collections", (req, res) => {
