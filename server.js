@@ -48,7 +48,7 @@ const {
   updateListWithListID,
   deleteListWithListID,
 } = list_queries(db);
-const { updateWidgetOwner } = widget_owner_queries(db);
+const { updateWidgetOwner, getAllWidgetOwners } = widget_owner_queries(db);
 const { addMultipleWidgetsToList } = list_content_queries(db);
 
 app.get("/login", (req, res) => {
@@ -133,10 +133,18 @@ app.get("/widgets", (req, res) => {
   getAllWidgets().then((response) => res.send(response));
 });
 
+app.get("/widgets/owners", (req, res) => {
+  getAllWidgetOwners()
+  .then(response => {
+    res.send(response);
+  })
+})
+
 app.get("/widgets/:id", (req, res) => {
   const widgetID = req.params.id;
   getWidgetWithWidgetID(widgetID).then((response) => res.send(response));
 });
+
 
 app.post("/widgets/checkout", (req, res) => {
   // req.body consists of an array of items to be checked out

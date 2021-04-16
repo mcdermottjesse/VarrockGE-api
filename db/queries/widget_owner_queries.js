@@ -9,5 +9,20 @@ module.exports = (db) => {
     .catch(err => err);
   };
 
-  return { updateWidgetOwner };
+  const getAllWidgetOwners = () => {
+    return db.query(`
+    SELECT tt.*
+    FROM widget_owners tt
+    INNER JOIN
+        (SELECT widget_id, MAX(id) AS MaxDateTime
+        FROM widget_owners
+        GROUP BY widget_id) groupedtt 
+    ON tt.widget_id = groupedtt.widget_id 
+    AND tt.id = groupedtt.MaxDateTime
+    `, [])
+    .then(response => response.rows)
+    .catch(err => err);
+  }
+
+  return { updateWidgetOwner, getAllWidgetOwners };
 };
