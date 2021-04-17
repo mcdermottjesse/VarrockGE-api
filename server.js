@@ -38,7 +38,7 @@ module.exports = db;
 
 // Query functions
 const { getUserInfoWithEmail, getUserInfoWithUserID } = user_queries(db);
-const { getAllWidgets, createWidget, getWidgetWithWidgetID } = widget_queries(
+const { getAllWidgets, createWidget, getWidgetWithWidgetID, updateWidgetPrice } = widget_queries(
   db
 );
 const {
@@ -152,7 +152,18 @@ app.get("/widgets/owners", (req, res) => {
 
 app.get("/widgets/:id", (req, res) => {
   const widgetID = req.params.id;
-  getWidgetWithWidgetID(widgetID).then((response) => res.send(response));
+  console.log(widgetID)
+  getWidgetWithWidgetID(widgetID)
+  .then((response) => res.send(response));
+});
+
+app.post("/widgets/:id", (req, res) => {
+  console.log('req.body updateSell', req.body)
+  const widgetID = req.params.id;
+  const {sellPrice} = req.body; 
+  // console.log('widget and sell price', widgetID, sellPrice)
+  //update the current_sell_price_cents of a widget
+  updateWidgetPrice(sellPrice, widgetID).then((response) => res.send(response));
 });
 
 
@@ -175,7 +186,7 @@ app.post("/widgets", (req, res) => {
     name: req.body.name, 
     MSRP_cents: req.body.cost,
     for_sale_by_owner: true, 
-    current_sell_price_cents: 1000, 
+    current_sell_price_cents: req.body.cost, 
     hash: "dummyTHIChash1",
     description: req.body.description
   }

@@ -38,9 +38,20 @@ module.exports = (db) => {
     .catch(err => err);
   };
 
+  const updateWidgetPrice = (price, widgetID) => {
+    return db.query(`
+    UPDATE widgets 
+    SET current_sell_price_cents = $1
+    WHERE id = $2
+    `, [price, widgetID])
+    .then(response => response.rows[0])
+    .catch(err => err);
+  }
+
   return {
     getAllWidgets,
     createWidget,
-    getWidgetWithWidgetID
+    getWidgetWithWidgetID,
+    updateWidgetPrice
   };
 };
