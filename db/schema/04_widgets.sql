@@ -9,5 +9,6 @@ CREATE TABLE widgets (
   for_sale_by_owner BOOLEAN,
   current_sell_price_cents INTEGER,
   hash VARCHAR(255),
-  description TEXT
+  description TEXT,
+  imgUrl TEXT
 );
