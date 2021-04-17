@@ -38,7 +38,7 @@ module.exports = db;
 
 // Query functions
 const { getUserInfoWithEmail, getUserInfoWithUserID } = user_queries(db);
-const { getAllWidgets, createWidget, getWidgetWithWidgetID, updateWidgetPrice } = widget_queries(
+const { getAllWidgets, createWidget, getWidgetWithWidgetID, updateWidgetPrice, updateWidgetForSale } = widget_queries(
   db
 );
 const {
@@ -162,10 +162,14 @@ app.post("/widgets/checkout", (req, res) => {
   // Create an array of promises to be fed into Promise.all
   const postRequestArray = [];
   for (const postRequest of req.body) {
+    postRequestArray.push(updateWidgetForSale(postRequest.for_sale_by_owner, postRequest.widgetID))
     postRequestArray.push(updateWidgetOwner(postRequest.userID, postRequest.widgetID, postRequest.boughtForPriceCents))
   }
 
-  Promise.all(postRequestArray).then(response => res.send(response));
+  Promise.all(postRequestArray)
+  .then(response => {
+    console.log("checkout", response)
+  })
 })
 
 app.post("/widgets/:id", (req, res) => {

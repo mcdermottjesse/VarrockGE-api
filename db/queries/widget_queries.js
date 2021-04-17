@@ -7,6 +7,16 @@ module.exports = (db) => {
     .then(response => response.rows)
     .catch(err => err);
   };
+
+  const updateWidgetForSale = (bool, id) => {
+    return db.query(`
+    UPDATE widgets 
+    SET for_sale_by_owner = $1 
+    WHERE id = $2
+    `, [bool, id])
+    .then(response => response.rows[0])
+    .catch(err => err);
+  }
   
   const createWidget = (widgetParams) => {
     const queryParams = [
@@ -48,10 +58,13 @@ module.exports = (db) => {
     .catch(err => err);
   }
 
+  
+
   return {
     getAllWidgets,
     createWidget,
     getWidgetWithWidgetID,
-    updateWidgetPrice
+    updateWidgetPrice,
+    updateWidgetForSale
   };
 };
