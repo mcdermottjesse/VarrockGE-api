@@ -157,16 +157,6 @@ app.get("/widgets/:id", (req, res) => {
   .then((response) => res.send(response));
 });
 
-app.post("/widgets/:id", (req, res) => {
-  console.log('req.body updateSell', req.body)
-  const widgetID = req.params.id;
-  const {sellPrice} = req.body; 
-  // console.log('widget and sell price', widgetID, sellPrice)
-  //update the current_sell_price_cents of a widget
-  updateWidgetPrice(sellPrice, widgetID).then((response) => res.send(response));
-});
-
-
 app.post("/widgets/checkout", (req, res) => {
   // req.body consists of an array of items to be checked out
   // Create an array of promises to be fed into Promise.all
@@ -177,6 +167,15 @@ app.post("/widgets/checkout", (req, res) => {
 
   Promise.all(postRequestArray).then(response => res.send(response));
 })
+
+app.post("/widgets/:id", (req, res) => {
+  console.log('req.body updateSell', req.body)
+  const widgetID = req.params.id;
+  const {sellPrice} = req.body; 
+  // console.log('widget and sell price', widgetID, sellPrice)
+  //update the current_sell_price_cents of a widget
+  updateWidgetPrice(sellPrice, widgetID).then((response) => res.send(response));
+});
 
 app.post("/widgets", (req, res) => {
  // widgetParams allows admin form to create a custom nft(no image yet)
