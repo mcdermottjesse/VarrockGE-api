@@ -113,7 +113,7 @@ app.post("/user/:id/collections/:listid", (req, res) => {
     addMultipleWidgetsToList(listID, listItems)
   })
   .then(response => {
-    res.send(`Collection ID ${listID} "${listName}" updated. It contains the following widgetes: ${listItems}`);
+    res.send({listID, listName, listItems});
   })
 });
 
