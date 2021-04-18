@@ -110,11 +110,10 @@ app.post("/user/:id/collections/:listid", (req, res) => {
     deleteAllWidgetsFromListID(listID)
   })
   .then((response) => {
-    res.send(response)
     addMultipleWidgetsToList(listID, listItems)
   })
   .then(response => {
-    res.send(`Collection ID ${listID} "${listName}" updated. It contains the following widgetes: ${listItems}`);
+    res.send({listID, listName, listItems});
   })
 });
 
@@ -122,10 +121,11 @@ app.post("/user/:id/collections", (req, res) => {
   // Create a new list for a user and add widgets to it
   const userID = req.params.id;
   const {listName, listDesc, listItems} = req.body;
-  createList(userID, listName, listDesc).then((response) => {
+  createList(userID, listName, listDesc)
+  .then((response) => {
     const listID = response.id;
-    addMultipleWidgetsToList(listID, listItems)
-    res.send(`Collection ID ${listID} "${listName}" created. Widgets ${listItems} added to it.`);
+    addMultipleWidgetsToList(listID, listItems);
+    res.send({listID});
   });
 });
 
