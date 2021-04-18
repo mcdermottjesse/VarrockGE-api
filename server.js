@@ -192,7 +192,8 @@ app.post("/widgets", (req, res) => {
     for_sale_by_owner: true, 
     current_sell_price_cents: req.body.cost, 
     hash: "dummyTHIChash1",
-    description: req.body.description
+    description: req.body.description,
+    imgUrl: req.body.imgUrl
   }
   createWidget(widgetParams).then((response) => res.send(response));
 });
