@@ -13,6 +13,7 @@ module.exports = (db) => {
     UPDATE widgets 
     SET for_sale_by_owner = $1 
     WHERE id = $2
+    RETURNING *
     `, [bool, id])
     .then(response => response.rows[0])
     .catch(err => err);

@@ -169,6 +169,7 @@ app.post("/widgets/checkout", (req, res) => {
   Promise.all(postRequestArray)
   .then(response => {
     console.log("checkout", response)
+    res.send(response);
   })
 })
 
