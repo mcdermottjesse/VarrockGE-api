@@ -60,13 +60,24 @@ module.exports = (db) => {
     .catch(err => err);
   }
 
-  
+  const getWidgetHistory = (widgetID) => {
+    return db.query(`
+    SELECT widget_owners.*, users.email
+    FROM widget_owners
+    JOIN users ON widget_owners.user_id = users.id
+    WHERE widget_id = $1
+    ORDER BY widget_owners.id DESC
+    `, [widgetID])
+    .then(response => response.rows)
+    .catch(err => err);
+  };
 
   return {
     getAllWidgets,
     createWidget,
     getWidgetWithWidgetID,
     updateWidgetPrice,
-    updateWidgetForSale
+    updateWidgetForSale,
+    getWidgetHistory
   };
 };
