@@ -38,7 +38,7 @@ module.exports = db;
 
 // Query functions
 const { getUserInfoWithEmail, getUserInfoWithUserID } = user_queries(db);
-const { getAllWidgets, createWidget, getWidgetWithWidgetID, updateWidgetPrice, updateWidgetForSale } = widget_queries(
+const { getAllWidgets, createWidget, getWidgetWithWidgetID, updateWidgetPrice, updateWidgetForSale, getWidgetHistory } = widget_queries(
   db
 );
 const {
@@ -150,11 +150,25 @@ app.get("/widgets/owners", (req, res) => {
   })
 })
 
+app.get("/widgets/:id/history", (req, res) => {
+  const widgetID = req.params.id;
+  getWidgetHistory(widgetID)
+  .then(response => {
+    // console.log('widget history is', response);
+    res.send(response);
+  });
+})
+
 app.get("/widgets/:id", (req, res) => {
   const widgetID = req.params.id;
-  console.log(widgetID)
-  getWidgetWithWidgetID(widgetID)
-  .then((response) => res.send(response));
+  const PromiseArray = [
+    getWidgetWithWidgetID(widgetID),
+    getWidgetHistory(widgetID)
+  ];
+  Promise.all(PromiseArray)
+  .then(response => {
+    res.send(response);
+  });
 });
 
 app.post("/widgets/checkout", (req, res) => {
