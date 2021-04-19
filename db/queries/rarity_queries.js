@@ -1,7 +1,7 @@
 module.exports = (db) => {
   const getAllRarities = () => {
     return db.query(`
-    SELECT *
+    SELECT id AS rarity_id, name
     FROM rarities
     `, [])
     .then(response => response.rows)
