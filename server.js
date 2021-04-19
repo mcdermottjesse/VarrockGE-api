@@ -7,6 +7,8 @@ const widget_queries = require("./db/queries/widget_queries");
 const list_queries = require("./db/queries/list_queries");
 const widget_owner_queries = require("./db/queries/widget_owner_queries");
 const list_content_queries = require("./db/queries/list_content_queries");
+const rarity_queries = require("./db/queries/rarity_queries");
+const subcategory_queries = require("./db/queries/subcategory_queries");
 
 const express = require("express");
 const path = require("path");
@@ -50,6 +52,9 @@ const {
 } = list_queries(db);
 const { updateWidgetOwner, getAllWidgetOwners } = widget_owner_queries(db);
 const { addMultipleWidgetsToList, deleteAllWidgetsFromListID } = list_content_queries(db);
+const { getAllRarities } = rarity_queries(db);
+const { getAllSubcategories } = subcategory_queries(db);
+
 
 app.get("/login", (req, res) => {
   res.send("This is the login page");
@@ -212,6 +217,22 @@ app.post("/widgets", (req, res) => {
   console.log(widgetParams)
   createWidget(widgetParams).then((response) => res.send(response));
 });
+
+// RARITIES
+app.get('/rarities', (req, res) => {
+  getAllRarities().then(response => {
+    res.send(response);
+  });
+});
+
+
+// SUBCATEGORIES
+app.get('/subcategories', (req, res) => {
+  getAllSubcategories().then(response => {
+    res.send(response);
+  });
+});
+
 
 app.listen(port, () => {
   console.log(`Express server listening on http://localhost:${port}`);
