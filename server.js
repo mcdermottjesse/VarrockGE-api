@@ -183,7 +183,7 @@ app.post("/widgets/:id", (req, res) => {
 });
 
 app.post("/widgets", (req, res) => {
- // widgetParams allows admin form to create a custom nft(no image yet)
+ //widgetParams allows admin form to create a custom nft(no image yet)
   const widgetParams = {
     rarity_id: req.body.rarityID,
     subcategory_id: req.body.categoryID,
@@ -192,8 +192,10 @@ app.post("/widgets", (req, res) => {
     for_sale_by_owner: true, 
     current_sell_price_cents: req.body.cost, 
     hash: "dummyTHIChash1",
-    description: req.body.description
+    description: req.body.description,
+    imgUrl: req.body.image
   }
+  console.log(widgetParams)
   createWidget(widgetParams).then((response) => res.send(response));
 });
 

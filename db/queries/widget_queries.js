@@ -28,11 +28,12 @@ module.exports = (db) => {
       widgetParams.for_sale_by_owner,
       Number(widgetParams.current_sell_price_cents),
       widgetParams.hash,
-      widgetParams.description
+      widgetParams.description,
+      widgetParams.imgUrl
     ]
     return db.query(`
-    INSERT INTO widgets (rarity_id, subcategory_id, name, MSRP_cents, for_sale_by_owner, current_sell_price_cents, hash, description)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO widgets (rarity_id, subcategory_id, name, MSRP_cents, for_sale_by_owner, current_sell_price_cents, hash, description, imgUrl)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING widgets.*
     `, queryParams)
     .then(response => response.rows[0])
