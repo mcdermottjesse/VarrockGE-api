@@ -13,7 +13,6 @@ const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
 const port = 3000;
-const multer = require("multer")
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -51,17 +50,6 @@ const {
 } = list_queries(db);
 const { updateWidgetOwner, getAllWidgetOwners } = widget_owner_queries(db);
 const { addMultipleWidgetsToList, deleteAllWidgetsFromListID } = list_content_queries(db);
-
-// const storage = multer.diskStorage({
-//   destination: './public/uploads/',
-//   filename: function(req, file, cb){
-//     cb(null, file.fieldname, '-', Date.now(), path.extname(file.originalname));
-//   },
-// });
-
-// const upload = multer({ 
-//   storage: storage
-// }).single('myImage');
 
 app.get("/login", (req, res) => {
   res.send("This is the login page");
@@ -195,10 +183,6 @@ app.post("/widgets/:id", (req, res) => {
 });
 
 app.post("/widgets", (req, res) => {
-  // upload(req, res, (err) => {
-  // console.log("req file", req.file)
-  // res.send('test')
-  // });
  //widgetParams allows admin form to create a custom nft(no image yet)
   const widgetParams = {
     rarity_id: req.body.rarityID,
