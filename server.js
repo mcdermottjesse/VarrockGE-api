@@ -195,21 +195,24 @@ app.post("/widgets/:id", (req, res) => {
 });
 
 app.post("/widgets", (req, res) => {
- 
- // widgetParams allows admin form to create a custom nft(no image yet)
-  const widgetParams = {
-    rarity_id: req.body.rarityID,
-    subcategory_id: req.body.categoryID,
-    name: req.body.name, 
-    MSRP_cents: req.body.cost,
-    for_sale_by_owner: true, 
-    current_sell_price_cents: req.body.cost, 
-    hash: "dummyTHIChash1",
-    description: req.body.description,
-    // imgUrl: req.body.image
-  }
-  console.log(widgetParams)
-  createWidget(widgetParams).then((response) => res.send(response));
+  upload(req, res, (err) => {
+  console.log("req file", req.file)
+  res.send('test')
+  });
+ //widgetParams allows admin form to create a custom nft(no image yet)
+  // const widgetParams = {
+  //   rarity_id: req.body.rarityID,
+  //   subcategory_id: req.body.categoryID,
+  //   name: req.body.name, 
+  //   MSRP_cents: req.body.cost,
+  //   for_sale_by_owner: true, 
+  //   current_sell_price_cents: req.body.cost, 
+  //   hash: "dummyTHIChash1",
+  //   description: req.body.description,
+  //   // imgUrl: req.body.image
+  // }
+  // console.log(widgetParams)
+  // createWidget(widgetParams).then((response) => res.send(response));
 });
 
 // app.post("/admin", (req, res) => {
