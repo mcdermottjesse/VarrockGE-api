@@ -1,8 +1,10 @@
 module.exports = (db) => {
   const getAllWidgets = () => {
     return db.query(`
-    SELECT *
+    SELECT widgets.id, rarities.name as rarity_id, subcategories.name as subcategory_id, widgets.name, widgets.msrp_cents, widgets.for_sale_by_owner, widgets.current_sell_price_cents, widgets.hash, widgets.description, widgets.imgurl
     FROM widgets
+    JOIN rarities ON widgets.rarity_id = rarities.id
+    JOIN subcategories ON widgets.subcategory_id = subcategories.id
     `, [])
     .then(response => response.rows)
     .catch(err => err);
