@@ -13,10 +13,12 @@ module.exports = (db) => {
   
   const getListContentWithListID = (listID) => {
     return db.query(`
-    SELECT list_contents.list_id, list_contents.widget_id, lists.name AS list_name, lists.description AS list_description, widgets.name, widgets.description, widgets.rarity_id, widgets.subcategory_id, widgets.msrp_cents, widgets.for_sale_by_owner, widgets.current_sell_price_cents, widgets.hash
+    SELECT list_contents.list_id, list_contents.widget_id, lists.name AS list_name, lists.description AS list_description, widgets.name, widgets.description, rarities.name as rarity_id, subcategories.name as subcategory_id, widgets.msrp_cents, widgets.for_sale_by_owner, widgets.current_sell_price_cents, widgets.hash, widgets.imgurl
     FROM list_contents
     JOIN lists ON lists.id = list_contents.list_id
     JOIN widgets ON list_contents.widget_id = widgets.id
+    JOIN rarities ON widgets.rarity_id = rarities.id
+    JOIN subcategories ON widgets.subcategory_id = subcategories.id
     WHERE list_contents.list_id = $1
     `, [listID])
     .then(response => response.rows)
