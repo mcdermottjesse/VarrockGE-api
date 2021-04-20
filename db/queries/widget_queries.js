@@ -57,6 +57,7 @@ module.exports = (db) => {
     UPDATE widgets 
     SET current_sell_price_cents = $1
     WHERE id = $2
+    RETURNING *
     `, [price, widgetID])
     .then(response => response.rows[0])
     .catch(err => err);
