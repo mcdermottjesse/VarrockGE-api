@@ -193,12 +193,21 @@ app.post("/widgets/checkout", (req, res) => {
 })
 
 app.post("/widgets/:id", (req, res) => {
+  console.log('line 196')
   console.log('req.body updateSell', req.body)
   const widgetID = req.params.id;
   const {sellPrice} = req.body; 
   // console.log('widget and sell price', widgetID, sellPrice)
   //update the current_sell_price_cents of a widget
-  updateWidgetPrice(sellPrice, widgetID).then((response) => res.send(response));
+  updateWidgetForSale(true, widgetID)
+  .then(response => {
+    // console.log('updateWidgetForSale', response);
+    updateWidgetPrice(sellPrice, widgetID)
+  })
+  .then((response) => {
+    // console.log('updateWidgetPrice response', response);
+    res.send(response)
+  });
 });
 
 app.post("/widgets", (req, res) => {
