@@ -1,4 +1,8 @@
 INSERT INTO subcategories (name)
 VALUES ('Pokemon'),
-('Magic the Gathering'), 
-('Yu-gi-oh!');
+('Esports Gamers'),
+('Iconic Moves'),
+('Iconic Characters')
+
+-- ('Magic the Gathering'), 
+-- ('Yu-gi-oh!');
